@@ -3,6 +3,16 @@ interface Coffee {
     description(): string;
 }
 
+abstract class CoffeeDecorator implements Coffee {
+    
+    constructor( protected coffee: Coffee ) {}
+
+    abstract cost(): number;
+
+    abstract description(): string;
+
+}
+
 class SimpleCoffee implements Coffee {
 
     public cost(): number {
@@ -14,15 +24,6 @@ class SimpleCoffee implements Coffee {
     }
 }
 
-abstract class CoffeeDecorator implements Coffee {
-    
-    constructor( protected coffee: Coffee ) {}
-
-    abstract cost(): number;
-
-    abstract description(): string;
-
-}
 
 class MilkDecorator extends CoffeeDecorator {
     
@@ -39,11 +40,29 @@ class MilkDecorator extends CoffeeDecorator {
     }
 }
 
+
+class SugarDecorator extends CoffeeDecorator {
+    
+    constructor( protected coffee: Coffee ) {
+        super(coffee)
+    }
+
+    cost(): number {
+        return this.coffee.cost() + 20;
+    }
+
+    description(): string {
+        return `${ this.coffee.description() } && Sugar`
+    }
+}
+
 // ------------------------------->
 
 let coffee: Coffee = new SimpleCoffee()
 
 coffee = new MilkDecorator(coffee);
+
+coffee = new SugarDecorator(coffee);
 
 console.log(`Cost ${coffee.cost()}`)
 
